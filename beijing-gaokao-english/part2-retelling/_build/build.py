@@ -4,11 +4,14 @@
     python3 _build/build.py            # Markdown sheets + practice page
     python3 _build/build.py --audio    # also re-synthesise the MP3s
                                        # (needs: pip install edge-tts imageio-ffmpeg, and network)
+    python3 _build/build.py --pdf      # also print the PDFs
+                                       # (needs: Node.js with the playwright package and its Chromium)
 """
 import argparse
 import asyncio
 import html
 import json
+import os
 import re
 import subprocess
 import sys
@@ -18,11 +21,12 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 AUDIO = ROOT / "audio"
 DURATIONS = AUDIO / "durations.json"
+PDF_DIR = ROOT / "pdf"
+PRINT_DIR = HERE / ".print"
 sys.path.insert(0, str(HERE))
-from content import SETS  # noqa: E402
+from content import PASSAGES, SETS  # noqa: E402
 
 BLANK = "＿＿＿＿＿＿"
-CN_NUM = "一二三四五六七八九十"
 
 SOURCES = [
     ("北京市2025年高考英语听说机考问答（首都之窗）",
@@ -90,26 +94,28 @@ def pron(s):
 
 # ---------- Markdown ----------
 
-INSTR_RECORD = (
-    "**第一节　听后记录**（共 4 小题；每小题 1.5 分，共 6 分）\n\n"
+# (heading, points, instruction) for the two sections of every set
+RECORD = (
+    "第一节　听后记录", "（共 4 小题；每小题 1.5 分，共 6 分）",
     "你将听到一段独白。请根据所听内容，完成下面的信息记录表。每空只填一个单词。"
-    "独白读两遍。你将有 60 秒的时间阅读表格。"
+    "独白读两遍。你将有 60 秒的时间阅读表格。",
 )
-INSTR_RETELL = (
-    "**第二节　听后转述**（共 9 分）\n\n"
+RETELL = (
+    "第二节　听后转述", "（共 9 分）",
     "你将再听一遍这段独白。请根据所听内容和信息记录表，用英语转述独白内容。"
-    "你将有 2 分钟的准备时间，然后在 2 分钟内完成转述。转述的开头已给出。"
+    "你将有 2 分钟的准备时间，然后在 2 分钟内完成转述。转述的开头已给出。",
 )
+INSTR_RECORD = f"**{RECORD[0]}**{RECORD[1]}\n\n{RECORD[2]}"
+INSTR_RETELL = f"**{RETELL[0]}**{RETELL[1]}\n\n{RETELL[2]}"
+SHEET_TITLE = "学生版 · 第二部分 听后记录和转述（5 套）"
+SHEET_NOTES = [
+    "每套流程：读表 60 秒 → 听两遍，填 4 个空 → 再听第三遍 → 准备 2 分钟 → 转述 2 分钟。",
+    "听的时候在草稿纸上画两栏：左边记要点，右边记表格里**没有**的细节（转述加分靠它）。",
+]
 
 
 def md_student():
-    out = [
-        "# 学生版 · 第二部分 听后记录和转述（5 套）",
-        "",
-        "> 每套流程：读表 60 秒 → 听两遍，填 4 个空 → 再听第三遍 → 准备 2 分钟 → 转述 2 分钟。",
-        "> 听的时候在草稿纸上画两栏：左边记要点，右边记表格里**没有**的细节（转述加分靠它）。",
-        "",
-    ]
+    out = [f"# {SHEET_TITLE}", "", *[f"> {n}" for n in SHEET_NOTES], ""]
     for s in SETS:
         out += [
             "---", "",
@@ -252,6 +258,15 @@ def md_sense():
     return "\n".join(out)
 
 
+def md_passages():
+    out = ["# 短文 1–5", ""]
+    for i, p in enumerate(PASSAGES, 1):
+        out += [f"## 短文 {i}", ""]
+        for x in paras(p):
+            out += [x, ""]
+    return "\n".join(out)
+
+
 def md_readme(durs):
     rows = "\n".join(
         f"| {s['id']} | {s['title']}（{s['topic_cn']}） | {s['genre']} | {s['speaker']} | "
@@ -263,12 +278,17 @@ def md_readme(durs):
 
 5 套原创模拟题，按北京高考英语听说机考第二部分的完整流程设计：同一段独白先做**听后记录**（4 个空），再做**听后转述**（开头已给出）。每套都有音频、学生版记录表、教师版答案 / 评分清单 / 参考转述，另附一份标好意群的原文，可用于第三部分朗读的断句练习。
 
+另有 5 篇记忆短文（3 篇 80 词、2 篇 150 词，由短到长），结构依次对应 5 套听力的题材，用来做转述前的记忆练习。
+
 > 题目是原创的仿真题，不是真题原文。题型、时间和分值依据公开的考试信息和备考资料整理（见文末）。官方真题练习可用北京教育考试院的英语听说考试练习系统（elst.bjeea.cn）。
 
 ## 文件
 
 | 文件 | 用途 |
 |---|---|
+| [pdf/passages-and-student-sheets.pdf](pdf/passages-and-student-sheets.pdf) | 打印用：短文 1–5 在前，学生版在后（A4） |
+| [pdf/student-sheets.pdf](pdf/student-sheets.pdf)、[pdf/passages.pdf](pdf/passages.pdf) | 同样的内容，分成两个文件 |
+| [passages.md](passages.md) | 记忆短文 1–5 的文本版 |
 | [student-sheets.md](student-sheets.md) | 学生版：答题说明、记录表、转述开头，可打印或投屏 |
 | [teacher-key.md](teacher-key.md) | 教师版：填空答案、转述评分清单、参考转述、易错点、听力原文 |
 | [sense-groups.md](sense-groups.md) | 断句练习：意群停顿规则，5 篇原文的断句划分 |
@@ -334,7 +354,7 @@ def md_readme(durs):
 
 ## 重新生成
 
-修改 `_build/content.py` 后运行 `python3 _build/build.py`。加 `--audio` 会重新合成音频，需要先 `pip install edge-tts imageio-ffmpeg`，并且能联网。
+修改 `_build/content.py` 后运行 `python3 _build/build.py`。加 `--audio` 会重新合成音频，需要先 `pip install edge-tts imageio-ffmpeg`，并且能联网。加 `--pdf` 会重新打印 PDF，需要 Node.js 和 playwright（`npm i -g playwright && npx playwright install chromium`）。
 """
 
 
@@ -362,6 +382,78 @@ def page(durs):
     return src
 
 
+# ---------- print (PDF) ----------
+
+def bold_md(text):
+    return re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", html.escape(text))
+
+
+def print_passages():
+    out = ['<section class="passages">']
+    first_long = True
+    for i, p in enumerate(PASSAGES, 1):
+        cls = "passage"
+        if len(p.split()) > 100 and first_long:  # the long passages start on a new page
+            cls += " newpage"
+            first_long = False
+        body = "".join(f"<p>{html.escape(x)}</p>" for x in paras(p))
+        out.append(f'<article class="{cls}"><h2>短文 {i}</h2><div class="en">{body}</div></article>')
+    out.append("</section>")
+    return "\n".join(out)
+
+
+def print_student():
+    def gaps(t):
+        return re.sub(r"\[(\d)\]", r'<span class="blank">(\1)<span class="gap"></span></span>', html.escape(t))
+
+    out = ['<section class="sheets">', '<header class="sheet-title">', f"<h1>{SHEET_TITLE}</h1>",
+           *[f"<p>{bold_md(n)}</p>" for n in SHEET_NOTES], "</header>"]
+    for s in SETS:
+        rows = []
+        for r in table_rows(s):
+            items = [gaps(t) for t in r["table"]]
+            body = items[0] if len(items) == 1 else "<ul>" + "".join(f"<li>{x}</li>" for x in items) + "</ul>"
+            rows.append(f'<tr><th scope="row">{html.escape(r["main"])}</th><td>{body}</td></tr>')
+        out.append(
+            f'<article class="set"><h2>第 {s["id"]} 套</h2>'
+            f"<h3>{RECORD[0]}<span>{RECORD[1]}</span></h3><p class=\"instr\">{RECORD[2]}</p>"
+            f'<table class="record en"><thead><tr><th colspan="2">{html.escape(s["title"])}</th></tr></thead>'
+            f'<tbody>{"".join(rows)}</tbody></table>'
+            f"<h3>{RETELL[0]}<span>{RETELL[1]}</span></h3><p class=\"instr\">{RETELL[2]}</p>"
+            f'<div class="rules"><div class="rule en">{html.escape(s["opening"])}</div>'
+            + '<div class="rule"></div>' * 5 + "</div></article>")
+    out.append("</section>")
+    return "\n".join(out)
+
+
+def print_doc(title, body):
+    css = (HERE / "print.css").read_text(encoding="utf-8")
+    return (f'<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
+            f"<title>{html.escape(title)}</title><style>{css}</style></head><body>{body}</body></html>")
+
+
+def make_pdfs():
+    docs = {
+        "passages-and-student-sheets": ("短文 1–5 · 学生版", print_passages() + print_student()),
+        "student-sheets": (SHEET_TITLE, print_student()),
+        "passages": ("短文 1–5", print_passages()),
+    }
+    PRINT_DIR.mkdir(exist_ok=True)
+    PDF_DIR.mkdir(exist_ok=True)
+    args = []
+    for name, (title, body) in docs.items():
+        src = PRINT_DIR / f"{name}.html"
+        src.write_text(print_doc(title, body), encoding="utf-8")
+        args += [str(src), str(PDF_DIR / f"{name}.pdf")]
+    env = dict(os.environ)
+    try:  # let node find a globally installed playwright
+        root = subprocess.run(["npm", "root", "-g"], capture_output=True, text=True, check=True).stdout.strip()
+        env["NODE_PATH"] = os.pathsep.join(p for p in (env.get("NODE_PATH"), root) if p)
+    except (OSError, subprocess.CalledProcessError):
+        pass
+    subprocess.run(["node", str(HERE / "pdf.js"), *args], check=True, env=env)
+
+
 # ---------- audio ----------
 
 def duration_of(path):
@@ -372,7 +464,6 @@ def duration_of(path):
 
 
 async def synth_all():
-    import os
     import certifi
     # edge-tts trusts only certifi's bundle; honour SSL_CERT_FILE (e.g. behind a TLS proxy).
     # Must happen before edge_tts is imported, because it builds its SSL context at import time.
@@ -393,6 +484,7 @@ async def synth_all():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--audio", action="store_true", help="re-synthesise the MP3 files")
+    ap.add_argument("--pdf", action="store_true", help="print the PDF handouts")
     args = ap.parse_args()
     if args.audio:
         print("audio:")
@@ -400,6 +492,7 @@ def main():
     durs = load_durations()
     outputs = {
         "README.md": md_readme(durs),
+        "passages.md": md_passages(),
         "student-sheets.md": md_student(),
         "teacher-key.md": md_teacher(durs),
         "sense-groups.md": md_sense(),
@@ -408,6 +501,9 @@ def main():
     for name, text in outputs.items():
         (ROOT / name).write_text(text.rstrip() + "\n", encoding="utf-8")
         print(f"wrote {name}")
+    if args.pdf:
+        print("pdf:")
+        make_pdfs()
 
 
 if __name__ == "__main__":

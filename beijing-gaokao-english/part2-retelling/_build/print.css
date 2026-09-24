@@ -1,0 +1,72 @@
+/* A4 handouts, printed by pdf.js. Page margins are set there. */
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  margin: 0;
+  color: #111;
+  font-family: "Songti SC", "SimSun", "Noto Serif CJK SC", "Source Han Serif SC", "WenQuanYi Zen Hei", serif;
+  font-size: 10.5pt;
+  line-height: 1.6;
+}
+.en { font-family: "Times New Roman", "Liberation Serif", Times, serif; }
+h1, h2, h3, p { margin: 0; }
+
+/* 短文 1–5 */
+.passage { break-inside: avoid; margin-bottom: 10mm; }
+.passage.newpage { break-before: page; }
+.passage h2 {
+  font-size: 13pt;
+  padding-bottom: 1.5mm;
+  margin-bottom: 3.5mm;
+  border-bottom: 0.6pt solid #888;
+}
+.passage .en { font-size: 13.5pt; line-height: 1.85; }
+.passage .en p + p { margin-top: 2.5mm; }
+
+/* 学生版 */
+.passages + .sheets { break-before: page; }
+.sheet-title { margin-bottom: 5mm; }
+.sheet-title h1 { font-size: 15pt; margin-bottom: 2mm; }
+.sheet-title p { font-size: 10pt; color: #444; }
+.set + .set { break-before: page; }
+.set h2 {
+  font-size: 14pt;
+  padding-bottom: 1.5mm;
+  margin-bottom: 4mm;
+  border-bottom: 1.2pt solid #111;
+}
+.set h3 { font-size: 11pt; margin: 6mm 0 1.5mm; }
+.set h2 + h3 { margin-top: 0; }
+.set h3 span { font-weight: 400; }
+.instr { margin-bottom: 3.5mm; }
+
+table.record { width: 100%; border-collapse: collapse; font-size: 12pt; line-height: 1.5; }
+table.record th, table.record td {
+  border: 0.75pt solid #222;
+  padding: 2.4mm 3mm;
+  text-align: left;
+  vertical-align: top;
+}
+table.record thead th { text-align: center; font-size: 13pt; background: #ececec; }
+table.record tbody th { width: 31%; }
+table.record ul { margin: 0; padding-left: 4.5mm; }
+table.record li + li { margin-top: 1.2mm; }
+tr { break-inside: avoid; }
+.blank { white-space: nowrap; }
+.gap {
+  display: inline-block;
+  width: 30mm;
+  margin-left: 1mm;
+  border-bottom: 0.75pt solid #111;
+  vertical-align: -0.6mm;
+}
+
+.rules { break-inside: avoid; }
+.rule {
+  height: 9.5mm;
+  padding-bottom: 1mm;
+  border-bottom: 0.6pt solid #999;
+  display: flex;
+  align-items: flex-end;
+  font-size: 13pt;
+}

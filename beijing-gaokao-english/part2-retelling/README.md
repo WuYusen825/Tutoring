@@ -2,12 +2,17 @@
 
 5 套原创模拟题，按北京高考英语听说机考第二部分的完整流程设计：同一段独白先做**听后记录**（4 个空），再做**听后转述**（开头已给出）。每套都有音频、学生版记录表、教师版答案 / 评分清单 / 参考转述，另附一份标好意群的原文，可用于第三部分朗读的断句练习。
 
+另有 5 篇记忆短文（3 篇 80 词、2 篇 150 词，由短到长），结构依次对应 5 套听力的题材，用来做转述前的记忆练习。
+
 > 题目是原创的仿真题，不是真题原文。题型、时间和分值依据公开的考试信息和备考资料整理（见文末）。官方真题练习可用北京教育考试院的英语听说考试练习系统（elst.bjeea.cn）。
 
 ## 文件
 
 | 文件 | 用途 |
 |---|---|
+| [pdf/passages-and-student-sheets.pdf](pdf/passages-and-student-sheets.pdf) | 打印用：短文 1–5 在前，学生版在后（A4） |
+| [pdf/student-sheets.pdf](pdf/student-sheets.pdf)、[pdf/passages.pdf](pdf/passages.pdf) | 同样的内容，分成两个文件 |
+| [passages.md](passages.md) | 记忆短文 1–5 的文本版 |
 | [student-sheets.md](student-sheets.md) | 学生版：答题说明、记录表、转述开头，可打印或投屏 |
 | [teacher-key.md](teacher-key.md) | 教师版：填空答案、转述评分清单、参考转述、易错点、听力原文 |
 | [sense-groups.md](sense-groups.md) | 断句练习：意群停顿规则，5 篇原文的断句划分 |
@@ -80,4 +85,4 @@
 
 ## 重新生成
 
-修改 `_build/content.py` 后运行 `python3 _build/build.py`。加 `--audio` 会重新合成音频，需要先 `pip install edge-tts imageio-ffmpeg`，并且能联网。
+修改 `_build/content.py` 后运行 `python3 _build/build.py`。加 `--audio` 会重新合成音频，需要先 `pip install edge-tts imageio-ffmpeg`，并且能联网。加 `--pdf` 会重新打印 PDF，需要 Node.js 和 playwright（`npm i -g playwright && npx playwright install chromium`）。
