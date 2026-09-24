@@ -1,0 +1,736 @@
+<title>北京听说转述特训</title>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
+<style>
+:root {
+  --bg: #edf0f3;
+  --surface: #ffffff;
+  --surface-2: #f4f6f9;
+  --ink: #17212d;
+  --muted: #536072;
+  --line: #d6dce4;
+  --line-strong: #aeb8c5;
+  --accent: #1f57b5;
+  --accent-ink: #ffffff;
+  --accent-soft: #e4ecf9;
+  --warn: #a95d0a;
+  --ok: #17774a;
+  --ok-soft: #e1f2e9;
+  --bad: #b2372e;
+  --hl: #fbeca6;
+  --hl-ink: #17212d;
+  --shadow: 0 1px 2px rgba(23, 33, 45, .06), 0 6px 18px rgba(23, 33, 45, .07);
+  --sans: "IBM Plex Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  --serif: "Literata", Georgia, "Songti SC", "SimSun", serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0f141a;
+    --surface: #161c24;
+    --surface-2: #1d252f;
+    --ink: #e3e8ee;
+    --muted: #98a4b3;
+    --line: #2c3642;
+    --line-strong: #46525f;
+    --accent: #86abf1;
+    --accent-ink: #0f141a;
+    --accent-soft: #1d2a40;
+    --warn: #e5a75a;
+    --ok: #5fc592;
+    --ok-soft: #16302a;
+    --bad: #f08a80;
+    --hl: #5a4a14;
+    --hl-ink: #f7ecc6;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 6px 18px rgba(0, 0, 0, .35);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f141a;
+  --surface: #161c24;
+  --surface-2: #1d252f;
+  --ink: #e3e8ee;
+  --muted: #98a4b3;
+  --line: #2c3642;
+  --line-strong: #46525f;
+  --accent: #86abf1;
+  --accent-ink: #0f141a;
+  --accent-soft: #1d2a40;
+  --warn: #e5a75a;
+  --ok: #5fc592;
+  --ok-soft: #16302a;
+  --bad: #f08a80;
+  --hl: #5a4a14;
+  --hl-ink: #f7ecc6;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 6px 18px rgba(0, 0, 0, .35);
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.6 var(--sans); }
+.wrap { max-width: 960px; margin-inline: auto; padding-inline: 16px; padding-block: 24px 56px; display: grid; gap: 18px; }
+h1, h2, h3, h4 { margin: 0; text-wrap: balance; line-height: 1.3; }
+p { margin: 0; }
+.muted { color: var(--muted); font-weight: 400; }
+
+/* header */
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .08em; color: var(--accent); margin-bottom: 6px; }
+h1 { font-size: clamp(22px, 3.4vw, 29px); font-weight: 600; }
+.lede { color: var(--muted); max-width: 64ch; margin-top: 8px; }
+.sets { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.set-btn { display: grid; gap: 1px; text-align: left; padding: 7px 12px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); cursor: pointer; font: inherit; }
+.set-btn .n { font-size: 12px; color: var(--muted); }
+.set-btn .t { font-weight: 600; font-size: 14.5px; }
+.set-btn:hover { border-color: var(--line-strong); }
+.set-btn[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
+.set-btn[aria-pressed="true"] .n { color: var(--accent); }
+
+/* exam console */
+.console { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; box-shadow: var(--shadow); display: grid; gap: 10px; }
+.console-main { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.stage { display: grid; gap: 1px; min-width: 0; }
+.stage-step { font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+.stage-label { font-weight: 600; font-size: 16.5px; display: flex; align-items: center; gap: 8px; }
+.stage-tip { font-size: 13px; color: var(--muted); }
+.rec { width: 9px; height: 9px; border-radius: 50%; background: var(--bad); flex: none; display: none; }
+.console[data-stage="speak"] .rec { display: inline-block; animation: pulse 1.2s ease-in-out infinite; }
+.console.is-paused .rec { animation: none; }
+@keyframes pulse { 50% { opacity: .25; } }
+.clock { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 600; font-size: clamp(24px, 5vw, 34px); color: var(--accent); white-space: nowrap; }
+.clock.warn, .console[data-stage="speak"] .clock { color: var(--bad); }
+.console.is-paused .clock { opacity: .5; }
+.bar { height: 4px; background: var(--surface-2); border-radius: 2px; overflow: hidden; }
+.bar span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .2s linear; }
+.console[data-stage="speak"] .bar span { background: var(--bad); }
+.track { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; overflow-x: auto; }
+.track li { flex: none; font-size: 12px; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.track li.done { color: var(--ink); background: var(--surface-2); }
+.track li[aria-current="step"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; }
+
+button { font: inherit; font-size: 14px; line-height: 1.4; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); padding: 6px 14px; cursor: pointer; }
+button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+button:disabled { opacity: .4; cursor: default; }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+button.primary:hover:not(:disabled) { color: var(--accent-ink); filter: brightness(1.08); }
+button.ghost { border-color: transparent; background: transparent; color: var(--muted); }
+button:focus-visible, input:focus-visible, summary:focus-visible, audio:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* exam paper */
+.paper { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px clamp(16px, 3.4vw, 30px) 24px; display: grid; gap: 22px; }
+.paper-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px; border-bottom: 2px solid var(--ink); padding-bottom: 10px; }
+.paper-head h2 { font-size: 18px; }
+.paper-head .meta { font-size: 13px; color: var(--muted); }
+.pts { font-weight: 400; color: var(--muted); font-size: .84em; display: inline-block; }
+.paper-head h2, .part h3 { text-wrap: wrap; }
+.part { display: grid; gap: 10px; }
+.part h3 { font-size: 15.5px; }
+.instr { color: var(--muted); font-size: 14px; max-width: 72ch; }
+.table-scroll { overflow-x: auto; }
+table.record { width: 100%; border-collapse: collapse; font-family: var(--serif); font-size: 15.5px; line-height: 1.6; }
+table.record th, table.record td { border: 1px solid var(--line-strong); padding: 8px 12px; vertical-align: top; text-align: left; }
+table.record thead th { text-align: center; font-size: 16px; font-weight: 600; background: var(--surface-2); }
+table.record tbody th { width: 32%; font-weight: 600; }
+table.record ul { margin: 0; padding-left: 1.1em; }
+table.record li + li { margin-top: 2px; }
+.blank-core { white-space: nowrap; }
+.blank .num { font: 500 12.5px var(--sans); color: var(--muted); margin-right: 3px; }
+.blank input { font: inherit; width: 7.2em; max-width: 100%; border: 0; border-bottom: 1.5px solid var(--ink); border-radius: 0; background: transparent; color: var(--ink); padding: 0 2px; text-align: center; }
+.blank input:read-only { border-bottom-style: dashed; color: var(--muted); }
+.blank input[data-state="ok"] { border-bottom: 2px solid var(--ok); color: var(--ok); }
+.blank input[data-state="case"] { border-bottom: 2px solid var(--warn); }
+.blank input[data-state="bad"] { border-bottom: 2px solid var(--bad); color: var(--bad); }
+.fb { font: 500 12.5px var(--sans); margin-left: 4px; }
+.fb.ok { color: var(--ok); }
+.fb.case { color: var(--warn); }
+.fb.bad { color: var(--bad); }
+.record-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.summary { font-size: 13.5px; color: var(--muted); }
+.chip { font-size: 12px; padding: 2px 9px; border-radius: 999px; background: var(--surface-2); color: var(--muted); border: 1px solid var(--line); }
+.opening { font-family: var(--serif); font-size: 17px; line-height: 2.2em; min-height: calc(2.2em * 3); background: repeating-linear-gradient(to bottom, transparent 0, transparent calc(2.2em - 1px), var(--line-strong) calc(2.2em - 1px), var(--line-strong) 2.2em); }
+.opening-wait { font-size: 14px; color: var(--muted); padding: 10px 12px; border: 1px dashed var(--line-strong); border-radius: 8px; }
+
+/* teacher area */
+.teacher { display: grid; gap: 10px; }
+.teacher-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-top: 6px; }
+.teacher-head h2 { font-size: 18px; }
+.teacher-head p { font-size: 13px; color: var(--muted); }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+summary { cursor: pointer; list-style: none; padding: 12px 16px; font-weight: 600; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+summary::-webkit-details-marker { display: none; }
+summary::before { content: "▸"; color: var(--muted); font-weight: 400; transition: transform .15s; }
+details[open] > summary::before { transform: rotate(90deg); }
+summary .count { font: 500 12.5px var(--sans); color: var(--muted); }
+.dbody { padding: 2px 16px 18px; display: grid; gap: 14px; }
+.dbody h4 { font-size: 14px; }
+.hint { font-size: 13px; color: var(--muted); }
+.reading { font-family: var(--serif); font-size: 16px; line-height: 1.8; max-width: 68ch; display: grid; gap: .8em; }
+mark.hl { background: var(--hl); color: var(--hl-ink); padding: 0 2px; border-radius: 2px; }
+.given { text-decoration: underline dotted var(--muted); text-underline-offset: 4px; }
+.ans { color: var(--accent); font-weight: 600; }
+.sep { color: var(--bad); font-weight: 600; font-family: var(--sans); }
+
+.score-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.score-summary > div { background: var(--surface-2); border-radius: 8px; padding: 8px 12px; display: grid; gap: 2px; }
+.score-summary .k { font-size: 12px; color: var(--muted); }
+.score-summary .v { font: 600 17px var(--mono); font-variant-numeric: tabular-nums; }
+.score-summary .band .v { color: var(--accent); }
+.row-block { display: grid; gap: 6px; }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.checks label { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; }
+.checks input { margin: .35em 0 0; flex: none; accent-color: var(--accent); width: 16px; height: 16px; }
+.checks .txt { font-family: var(--serif); font-size: 15px; line-height: 1.55; }
+.checks.lang .txt { font-family: var(--sans); font-size: 14px; }
+.tag { flex: none; font-size: 11.5px; line-height: 1.7; padding: 0 6px; border-radius: 4px; margin-top: .15em; }
+.tag.t { background: var(--accent-soft); color: var(--accent); }
+.tag.x { background: var(--ok-soft); color: var(--ok); }
+.fine { font-size: 12.5px; color: var(--muted); }
+
+.seg { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; border-radius: 0; padding: 5px 14px; }
+.seg button + button { border-left: 1px solid var(--line-strong); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.script-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.script-tools audio { width: min(100%, 340px); height: 36px; }
+
+.table-plain { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table-plain th, .table-plain td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.table-plain th { font-size: 12.5px; color: var(--muted); font-weight: 500; }
+.table-plain td:nth-child(2) { font-family: var(--serif); font-weight: 600; white-space: nowrap; }
+.list { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; font-size: 14px; }
+.vocab { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; }
+.vocab b { font-family: var(--serif); }
+
+.foot { font-size: 12.5px; color: var(--muted); display: grid; gap: 6px; border-top: 1px solid var(--line); padding-top: 14px; }
+.foot ul { margin: 0; padding-left: 1.2em; }
+.foot a { color: var(--accent); }
+
+@media (max-width: 560px) {
+  .sets { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+  .set-btn { flex: none; }
+  .track { display: none; }
+  .console { padding: 10px 12px; gap: 8px; }
+  .stage-tip { display: none; }
+  table.record tbody th { width: 36%; }
+  table.record th, table.record td { padding: 7px 9px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bar span, summary::before { transition: none; }
+  .console[data-stage="speak"] .rec { animation: none; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">北京高考英语听说 · 第二部分</p>
+    <h1>听后记录和转述 · 5 套模拟练习</h1>
+    <p class="lede">同一段独白先听两遍填 4 个空，再听第三遍，准备 2 分钟，转述 2 分钟。点「开始模拟」后，页面按这个节奏自动放录音、自动计时。</p>
+    <nav class="sets" id="sets" aria-label="选择套题"></nav>
+  </header>
+
+  <section class="console" id="console" data-stage="idle" aria-label="考试计时">
+    <div class="console-main">
+      <div class="stage">
+        <span class="stage-step" id="stageStep"></span>
+        <span class="stage-label"><span class="rec" aria-hidden="true"></span><span id="stageLabel" aria-live="polite"></span></span>
+        <span class="stage-tip" id="stageTip"></span>
+      </div>
+      <div class="clock" id="clock">1:00</div>
+    </div>
+    <div class="bar" aria-hidden="true"><span id="barFill"></span></div>
+    <ol class="track" id="track" aria-label="考试流程"></ol>
+    <div class="controls">
+      <button type="button" class="primary" id="btnStart">开始模拟</button>
+      <button type="button" id="btnPause" disabled>暂停</button>
+      <button type="button" id="btnSkip" disabled title="跳过当前这一步">跳过</button>
+      <button type="button" id="btnReset" disabled>结束</button>
+      <button type="button" id="btnPlay" hidden>播放录音</button>
+    </div>
+  </section>
+
+  <article class="paper" aria-label="试卷">
+    <header class="paper-head">
+      <h2>第二部分　听后记录和转述 <span class="pts">（共 15 分）</span></h2>
+      <p class="meta" id="setMeta"></p>
+    </header>
+    <section class="part">
+      <h3>第一节　听后记录 <span class="pts">（共 4 小题；每小题 1.5 分，共 6 分）</span></h3>
+      <p class="instr">你将听到一段独白。请根据所听内容，完成下面的信息记录表。每空只填一个单词。独白读两遍。你将有 60 秒的时间阅读表格。</p>
+      <div class="table-scroll"><table class="record" id="record"></table></div>
+      <div class="record-tools">
+        <button type="button" id="btnCheck">核对填空</button>
+        <button type="button" class="ghost" id="btnClear">清空</button>
+        <span class="chip" id="lockNote" hidden>记录已提交</span>
+        <span class="summary" id="checkSummary" aria-live="polite"></span>
+      </div>
+    </section>
+    <section class="part">
+      <h3>第二节　听后转述 <span class="pts">（共 9 分）</span></h3>
+      <p class="instr">你将再听一遍这段独白。请根据所听内容和信息记录表，用英语转述独白内容。你将有 2 分钟的准备时间，然后在 2 分钟内完成转述。转述的开头已给出。</p>
+      <p class="opening" id="opening"></p>
+      <p class="opening-wait" id="openingWait" hidden>第三遍录音开始时显示转述开头。</p>
+    </section>
+  </article>
+
+  <section class="teacher" aria-labelledby="teacherTitle">
+    <div class="teacher-head">
+      <h2 id="teacherTitle">教师区</h2>
+      <p>学生做题时先别展开。</p>
+    </div>
+    <details id="dScore">
+      <summary>转述评分清单 <span class="count" id="scoreCount"></span></summary>
+      <div class="dbody">
+        <p class="hint">边听学生转述边打勾。满分要求：表格内信息全部说到，另外至少补 3 条表格外细节，并且来自不同要点。</p>
+        <div class="score-summary">
+          <div><span class="k">表格内信息</span><span class="v" id="sTable">0/0</span></div>
+          <div><span class="k">表格外细节</span><span class="v" id="sExtra">0 条</span></div>
+          <div><span class="k">语言与流利度</span><span class="v" id="sLang">0/5</span></div>
+          <div class="band"><span class="k">估计档次</span><span class="v" id="sBand">—</span></div>
+        </div>
+        <div id="scoreRows" class="dbody" style="padding:0"></div>
+        <div class="row-block">
+          <h4>语言与流利度</h4>
+          <ul class="checks lang" id="langList"></ul>
+        </div>
+        <p class="fine">估计档次按本页的练习分档推算（一档 8–9 分：表格信息全、补充 ≥3 条且来自不同要点、语言项 ≥4），仅供参考，不是官方评分。</p>
+        <div><button type="button" class="ghost" id="btnClearScore">清空打勾</button></div>
+      </div>
+    </details>
+    <details id="dModel">
+      <summary>参考转述</summary>
+      <div class="dbody">
+        <p class="hint" id="modelHint"></p>
+        <div class="reading" id="model"></div>
+      </div>
+    </details>
+    <details id="dScript">
+      <summary>听力原文 · 断句版</summary>
+      <div class="dbody">
+        <div class="script-tools">
+          <div class="seg" role="group" aria-label="原文视图">
+            <button type="button" id="viewPlain" aria-pressed="true">原文</button>
+            <button type="button" id="viewSense" aria-pressed="false">断句版</button>
+          </div>
+          <audio id="manual" controls preload="none"></audio>
+        </div>
+        <p class="hint" id="scriptHint"></p>
+        <div class="reading" id="script"></div>
+      </div>
+    </details>
+    <details id="dKey">
+      <summary>填空答案 · 易错点 · 词汇</summary>
+      <div class="dbody" id="keyBody"></div>
+    </details>
+  </section>
+
+  <footer class="foot">
+    <p>5 套题都是原创仿真题，不是真题原文；录音由语音合成生成。评分清单和估计档次仅作练习参考。两遍之间的 10 秒间隔和第二遍后的 10 秒检查时间是练习设定，真实考试以机考提示为准。</p>
+    <p>题型信息来源：</p>
+    <ul><li><a href="https://www.beijing.gov.cn/fuwu/bmfw/sy/jrts/202411/t20241118_3942798.html" target="_blank" rel="noopener">北京市2025年高考英语听说机考问答（首都之窗）</a></li><li><a href="https://www.gaokzx.com/c/202403/92048.html" target="_blank" rel="noopener">2024年北京高考英语听说考备考技巧——听后转述题（北京高考在线）</a></li><li><a href="https://www.gaokzx.com/gk/gaokao/149636.html" target="_blank" rel="noopener">2026北京高考英语听说考备考指南：听后转述（北京高考在线）</a></li><li><a href="https://m.sohu.com/a/832124006_121124317/" target="_blank" rel="noopener">北京2025年第一次高考英语听说考备考全攻略（搜狐）</a></li></ul>
+  </footer>
+</div>
+
+<script>
+(() => {
+  const SETS = [{"id": 1, "slug": "set1-sleep", "topic_cn": "睡眠建议", "theme": "人与自我 · 健康生活", "genre": "建议类（Tips）", "speaker": "校医 Dr. Lin（女声，美音）", "pronoun": "she", "title": "Tips on Getting Better Sleep", "opening": "The speaker shares some tips on getting better sleep.", "rows": [{"main": "Why sleep matters", "table": ["Our brain turns what we learned during the day into long-term [1]."], "extras": ["Many students stay up late, but sleep is not a waste of time."]}, {"main": "Tip 1: Keep a regular schedule", "table": ["Go to bed and get up at the same time every day, even on [2].", "This helps the body's inner clock work properly."], "extras": ["Staying in bed until noon on Sunday makes it hard to fall asleep that night."]}, {"main": "Tip 2: Put away your phone", "table": ["Do it at least half an hour before bed.", "Blue light from screens makes you feel less [3]."], "extras": ["Chatting online or watching short videos keeps your mind active.", "Read a paper book or listen to soft music instead."]}, {"main": "Tip 3: Make your bedroom a good place for sleep", "table": ["It should be dark, [4] and a little cool.", "Avoid coffee or strong tea in the afternoon."], "extras": ["Earplugs may help if there's noise outside.", "The effect of coffee or tea can last for several hours."]}, {"main": "Ending", "in_table": false, "table": [], "extras": ["Good sleep helps you think more clearly and stay in a better mood."]}], "answers": [{"word": "memory", "accept": ["memory"], "note": "名词单数：long-term memory"}, {"word": "weekends", "accept": ["weekends"], "note": "名词复数，别漏 s"}, {"word": "sleepy", "accept": ["sleepy"], "note": "形容词 less sleepy，不要写成 sleep"}, {"word": "quiet", "accept": ["quiet"], "note": "安静的；别和 quite（相当）混淆"}], "pitfalls": ["说话人是女校医，全程用 she / her，不要 he、she 混用。", "原文是对“你”说的祈使句，转述时要换成转述结构：Keep a regular schedule. → Her first tip is to keep a regular schedule. / She advises us to …", "you 转述成 we / us（说话人和学生是一方），不要照搬 “you should …”。", "填空拼写：weekends 要加 s；quiet（安静）≠ quite（相当）。"], "script": ["Good afternoon, everyone. I'm Dr. Lin / from the school health center. Many of you are working hard / for the college entrance exam, and some of you tell me / that you often stay up late. But sleep is not a waste of time. While we sleep, our brain sorts out / what we learned during the day / and turns it into long-term {memory}. So today, I'd like to share three tips / on getting better sleep.", "First, keep a regular schedule. Try to go to bed and get up / at the same time every day, even on {weekends}. Your body has an inner clock, and a regular schedule / helps it work properly. If you stay in bed until noon on Sunday, you may find it hard / to fall asleep that night.", "Second, put away your phone / at least half an hour before bed. The blue light from screens / tells your brain / that it's still daytime, so you feel less {sleepy}. Besides, chatting online / or watching short videos / keeps your mind active. Instead, you can read a paper book / or listen to some soft music.", "Third, make your bedroom / a good place for sleep. It should be dark, {quiet} and a little cool. If there's noise outside, earplugs may help. Also, avoid drinks like coffee or strong tea / in the afternoon, because their effect / can last for several hours.", "Remember, a good night's sleep / will help you think more clearly / and stay in a better mood. Try these tips tonight, and I believe / you'll feel the difference in class tomorrow. Thank you."], "model": ["She [[points out]] that sleep is not a waste of time, [[because]] while we sleep, our brain turns what we learned into long-term memory.", "Her [[first]] tip is to keep a regular schedule. We should go to bed and get up at the same time every day, even on weekends, which helps our inner clock work properly. [[For example]], staying in bed until noon on Sunday may make it hard to fall asleep that night.", "[[Second]], she [[advises us to]] put away our phones at least half an hour before bed, [[because]] blue light from screens makes us feel less sleepy. We can read a paper book [[instead]].", "[[Third]], our bedroom should be dark, quiet and a little cool, and earplugs may help if it's noisy outside. We'd [[also]] better avoid coffee or strong tea in the afternoon.", "[[Finally]], she [[says]] good sleep helps us think more clearly and stay in a better mood."], "vocab": [["inner clock", "生物钟"], ["stay up late", "熬夜"], ["earplugs", "耳塞"], ["in a better mood", "心情更好"]], "audio": "audio/set1-sleep.mp3", "duration": 105.4, "words": 258, "model_words": 163}, {"id": 2, "slug": "set2-central-axis", "topic_cn": "北京中轴线", "theme": "人与社会 · 历史与文化", "genre": "介绍类（事物介绍）", "speaker": "讲座主讲人（男声，英音）", "pronoun": "he", "title": "The Beijing Central Axis", "opening": "The speaker gives an introduction to the Beijing Central Axis.", "rows": [{"main": "What it is", "table": ["An imaginary line running from north to south through old Beijing", "7.8 kilometers long; famous buildings like the Forbidden City stand along it"], "extras": ["It was added to the World Heritage List in July 2024.", "It runs from Yongdingmen in the south to the Bell and Drum Towers in the north."]}, {"main": "Why it is special", "table": ["History: its planning began more than 700 years ago.", "Design: it shows the Chinese idea of [1].", "Daily life: people live, work and go [2] along it."], "extras": ["Its planning began in the Yuan Dynasty and kept growing in later centuries.", "Buildings on the two sides are like mirror images; the most important ones sit in the middle.", "Example: the Temple of Heaven on the east, the Temple of Agriculture on the west."]}, {"main": "How it is protected", "table": ["Some buildings that blocked the view were [3].", "Visitors can take a [4] tour online."], "extras": ["Old courtyards along the axis were repaired.", "Online, visitors can see how the axis looked hundreds of years ago."]}, {"main": "Ending", "in_table": false, "table": [], "extras": ["Walking along the axis means walking through seven centuries of history."]}], "answers": [{"word": "balance", "accept": ["balance"], "note": "名词：the idea of balance（平衡、对称）"}, {"word": "shopping", "accept": ["shopping"], "note": "go shopping，双写 p"}, {"word": "removed", "accept": ["removed"], "note": "被动语态 were removed，填过去分词"}, {"word": "virtual", "accept": ["virtual"], "note": "形容词 a virtual tour（虚拟游览）"}], "pitfalls": ["说话人是男主讲人，用 he / his。", "被动语态要说对：was added to the World Heritage List / were removed / were repaired。", "专有名词（Yongdingmen、the Temple of Agriculture）一时说不出，就用 a famous gate / another temple 带过，千万别停下来卡住。", "7.8 kilometers 读作 seven point eight kilometers；700 读作 seven hundred。"], "script": ["Hello, everyone, and welcome to today's lecture. In July 2024, the Beijing Central Axis / was added to the World Heritage List. Today I'll tell you what it is, why it's special, and how it's being protected.", "So, what is the Central Axis? It's an imaginary line / that runs from north to south / through the center of old Beijing. It's 7.8 kilometers long, starting from Yongdingmen in the south / and ending at the Bell and Drum Towers in the north. Along this line / you can find some of the most famous buildings in the city, such as the Forbidden City, Tiananmen and Jingshan Park.", "Why is it so special? First, it has a long history. The planning of the axis / began in the Yuan Dynasty, more than 700 years ago, and it kept growing / in the centuries that followed. Second, it shows the traditional Chinese idea of {balance}. Buildings on the east and west sides of the line / are arranged like mirror images, and the most important buildings / sit right in the middle. For example, the Temple of Heaven stands on the east, while the Temple of Agriculture stands on the west. Third, it's still full of life. People live, work and go {shopping} along it / every day.", "Protecting such a heritage site / is not easy. In recent years, some buildings that blocked the view / were {removed}, and old courtyards along the axis / were repaired. Digital technology / is also playing a part. Visitors can now take a {virtual} tour online / and see how the axis looked / hundreds of years ago.", "So next time you walk along the axis, remember that you are walking through / seven centuries of history. Thank you."], "model": ["He [[mentions]] that it was added to the World Heritage List in July 2024.", "[[First]], he explains what it is. It's an imaginary line running from north to south through old Beijing. It's 7.8 kilometers long, from Yongdingmen in the south to the Bell and Drum Towers in the north, and famous buildings like the Forbidden City stand along it.", "[[Then]] he tells us why it is special. [[To begin with]], it has a long history, [[because]] its planning began in the Yuan Dynasty more than 700 years ago. [[Besides]], it shows the Chinese idea of balance. [[For example]], the Temple of Heaven on the east side matches the Temple of Agriculture on the west. [[What's more]], it's still full of life, [[since]] people live, work and go shopping along it.", "[[Finally]], he talks about how it is protected. Some buildings that blocked the view were removed, and old courtyards were repaired. Visitors can [[also]] take a virtual tour online."], "vocab": [["axis", "轴线"], ["imaginary", "想象中的；假想的"], ["World Heritage List", "《世界遗产名录》"], ["courtyard", "院落"], ["virtual tour", "虚拟游览"], ["the Temple of Agriculture", "先农坛"], ["the Bell and Drum Towers", "钟鼓楼"]], "audio": "audio/set2-central-axis.mp3", "duration": 115.4, "words": 279, "model_words": 170}, {"id": 3, "slug": "set3-swifts", "topic_cn": "北京雨燕", "theme": "人与自然 · 动物保护", "genre": "说明类（问题—措施）", "speaker": "观鸟志愿者（女声，英音）", "pronoun": "she", "title": "Beijing Swifts", "opening": "The speaker is talking about Beijing swifts.", "rows": [{"main": "Amazing birds", "table": ["The only wild bird named after Beijing", "They can eat, drink and even [1] while flying.", "In late July, they fly to southern [2] for the winter."], "extras": ["They return to Beijing every April.", "They spend most of their lives in the air and seldom land except to nest.", "The round trip is more than 30,000 kilometers every year."]}, {"main": "The problem", "table": ["Their number has dropped sharply.", "They are losing their homes as old buildings were pulled down or [3]."], "extras": ["They nest in holes under the roofs of tall old buildings, such as city gates and temples."]}, {"main": "Actions taken", "table": ["Scientists study their journey with tracking devices.", "Volunteers hang up nest [4]."], "extras": ["When old buildings are repaired, workers try to keep the holes for the birds."]}, {"main": "What we can do", "in_table": false, "table": [], "extras": ["Join a bird-watching activity or share what we know with friends and family.", "With our care, the swifts will keep coming back every spring."]}], "answers": [{"word": "sleep", "accept": ["sleep"], "note": "动词原形：can eat, drink and even sleep"}, {"word": "Africa", "accept": ["Africa"], "note": "专有名词，首字母大写"}, {"word": "repaired", "accept": ["repaired"], "note": "与 pulled down 并列，被动语态，填过去分词"}, {"word": "boxes", "accept": ["boxes"], "note": "复数加 -es：nest boxes"}], "pitfalls": ["说话人是女志愿者，用 she；雨燕用 they / their，别把 it 和 they 混着用。", "主谓一致：the number of swifts has dropped（the number of 作主语，谓语用单数）。", "填空：Africa 首字母大写；boxes 是 box 的复数，加 -es。", "30,000 读作 thirty thousand；over the past few decades 用现在完成时 has dropped。"], "script": ["Hi, everyone. Every April, a special group of guests / returns to Beijing. They are Beijing swifts, the only wild bird / named after our city. Today I'd like to tell you about these amazing birds, the trouble they're facing, and what we can do to help.", "Beijing swifts are small dark birds / with long, narrow wings. They are excellent fliers. In fact, they spend most of their lives / in the air. They can eat, drink and even {sleep} while flying, and they seldom land / except to build nests and raise their young. After spending the summer in Beijing, they leave in late July / and fly all the way to southern {Africa} / for the winter. That's a round trip of more than 30,000 kilometers / every year!", "However, the number of Beijing swifts / has dropped sharply / over the past few decades. The main reason is / that they are losing their homes. Swifts like to nest in holes / under the roofs of tall old buildings, such as city gates and temples. As many old buildings were pulled down or {repaired}, those holes disappeared.", "The good news is / that people are taking action. Scientists have put tiny tracking devices on some swifts / to learn more about their journey. Volunteers have hung up nest {boxes} / under the roofs of buildings. And now, when old buildings are repaired, workers try to keep the holes / for the birds.", "You can help, too. Join a bird-watching activity, or simply share what you know / with your friends and family. With our care, the swifts will keep coming back to Beijing / every spring. Thank you."], "model": ["[[First]], she tells us that they are amazing birds. They are the only wild bird named after Beijing, and they return to the city every April. They spend most of their lives in the air and can eat, drink and even sleep while flying. In late July, they fly to southern Africa for the winter, which is a round trip of more than 30,000 kilometers.", "[[However]], their number has dropped sharply, [[because]] they are losing their homes. They like to nest in holes under the roofs of old buildings, [[but]] as many old buildings were pulled down or repaired, the holes disappeared.", "[[Luckily]], people are taking action. Scientists study their journey with tracking devices, volunteers hang up nest boxes, [[and]] workers try to keep the holes when repairing old buildings.", "[[Finally]], the speaker [[encourages us to]] join bird-watching activities or share what we know with others."], "vocab": [["swift", "雨燕"], ["round trip", "往返行程"], ["nest", "筑巢；巢"], ["tracking device", "追踪装置"], ["decade", "十年"]], "audio": "audio/set3-swifts.mp3", "duration": 109.0, "words": 264, "model_words": 153}, {"id": 4, "slug": "set4-note-taking", "topic_cn": "手写 vs 电脑记笔记", "theme": "人与自我 · 学习方法", "genre": "研究报告类（研究—结果—原因—建议）", "speaker": "教师讲座（男声，美音）", "pronoun": "he", "title": "A Study on Note-taking", "opening": "The speaker is talking about a study on note-taking.", "rows": [{"main": "The study", "table": ["Students took notes on laptops or by [1].", "Later, they answered questions about facts and about understanding."], "extras": ["Many students think typing is better because it's faster.", "The study was done by two American psychologists.", "University students watched short talks; the test came about half an hour later."]}, {"main": "The results", "table": ["Fact questions: the two groups did [2] well.", "Understanding questions: the handwriting group did much better."], "extras": ["The fact questions tested things like dates and names."]}, {"main": "The reasons", "table": ["Laptop users copied the speaker's words almost [3].", "Handwriting users had to pick out the main points and use their own words."], "extras": ["Laptop users were just recording, not thinking.", "Handwriting users couldn't write down every word, so they had to listen carefully.", "This extra thinking helped them understand and remember better."]}, {"main": "The advice", "table": ["Don't try to copy everything; listen for the key ideas.", "Spend a few minutes [4] your notes after class."], "extras": ["This doesn't mean laptops are useless.", "That's how notes become knowledge."]}], "answers": [{"word": "hand", "accept": ["hand"], "note": "固定搭配 by hand（手写）"}, {"word": "equally", "accept": ["equally"], "note": "副词修饰 well，注意双写 l"}, {"word": "exactly", "accept": ["exactly"], "note": "副词：almost exactly（几乎一字不差）"}, {"word": "reviewing", "accept": ["reviewing"], "note": "spend time doing，用 -ing 形式"}], "pitfalls": ["时态分两层：研究过程用一般过去时（watched / took / answered / did better），结论和建议用一般现在时。", "对比关系要说出来：while / but / in contrast / on the other hand，否则“两组学生”会讲乱。", "填空：equally 双写 l；spend a few minutes reviewing（spend time doing）。", "建议部分别照搬 “don't copy everything”，换成 He advises us not to copy everything …"], "script": ["Good morning, everyone. Do you take notes by {hand} / or on a laptop? Many students believe / that typing is better / because it's faster. But a study by two American psychologists / suggests something different. Let me tell you about it.", "In the study, a group of university students / watched some short talks / and took notes as they usually did. Half of them used laptops, while the other half / wrote with pen and paper. About half an hour later, they answered two kinds of questions. Some questions tested facts, such as dates and names. Others tested / whether they really understood / the ideas in the talks.", "The results were surprising. On the fact questions, the two groups did {equally} well. But on the understanding questions, the students who wrote by hand / did much better.", "Why? The researchers found / that the laptop users typed so fast / that they copied down the speaker's words / almost {exactly}. They were just recording, not thinking. The handwriting group, on the other hand, couldn't write down every word. So they had to listen carefully, pick out the main points / and put them into their own words. This extra thinking / helped them understand and remember better.", "So what can we learn from this? It doesn't mean / that laptops are useless. But whether you write or type, don't try to copy everything. Listen for the key ideas / and use your own words. After class, spend a few minutes {reviewing} your notes. That's how notes become knowledge. Thank you."], "model": ["Many students think typing is better because it's faster, [[but]] a study by two American psychologists suggests something different.", "In the study, some university students watched short talks. Half of them took notes on laptops, [[while]] the other half took notes by hand. About half an hour later, they answered questions about facts and about understanding.", "[[The results showed that]] the two groups did equally well on the fact questions, [[but]] the handwriting group did much better on the understanding questions.", "[[The reason is that]] the laptop users copied the speaker's words almost exactly. They were just recording, not thinking. [[In contrast]], the handwriting group couldn't write down every word, [[so]] they had to pick out the main points and use their own words.", "[[Therefore]], the speaker [[advises us]] not to copy everything but to listen for the key ideas. We should [[also]] spend a few minutes reviewing our notes after class."], "vocab": [["psychologist", "心理学家"], ["take notes", "记笔记"], ["pick out", "挑出"], ["in one's own words", "用自己的话"]], "audio": "audio/set4-note-taking.mp3", "duration": 101.6, "words": 247, "model_words": 161}, {"id": 5, "slug": "set5-volunteer", "topic_cn": "教老人用手机", "theme": "人与社会 · 志愿服务", "genre": "经历类（第一人称叙事）", "speaker": "学生 Li Na（女声，美音）", "pronoun": "she", "title": "A Volunteer Experience", "opening": "The speaker, Li Na, shares her experience as a volunteer last summer.", "rows": [{"main": "Background", "table": ["Last summer, Li Na joined a volunteer program.", "Her job was to help [1] people use smartphones."], "extras": ["At first, she thought it would be easy because she uses her phone every day, but she was wrong."]}, {"main": "Difficulties", "table": ["Mrs. Wang forgot all the steps the next day.", "The words on the screen were too small, and she was afraid of pressing the wrong [2]."], "extras": ["Mrs. Wang, aged 78, wanted to make video calls with her grandson studying abroad.", "Li Na realized the problem was with herself: she had gone too fast."]}, {"main": "Solutions", "table": ["She made the words on the phone [3].", "She wrote each step on a card and let Mrs. Wang practice again and again."], "extras": ["The steps were in large letters, so Mrs. Wang could check them at home.", "She told Mrs. Wang how to avoid phone scams."]}, {"main": "Result", "table": ["Two weeks later, Mrs. Wang called her grandson by herself."], "extras": ["Mrs. Wang was so excited that she held Li Na's hands and said thank you many times."]}, {"main": "Lessons", "table": ["She learned that [4] matters more than skills.", "The elderly are not slow learners."], "extras": ["They just need someone to walk at their pace.", "She hopes more young people will help grandparents keep up with the digital world."]}], "answers": [{"word": "elderly", "accept": ["elderly"], "note": "形容词：elderly people（老年人）"}, {"word": "button", "accept": ["button"], "note": "名词单数：the wrong button"}, {"word": "bigger", "accept": ["bigger"], "note": "比较级，双写 g"}, {"word": "patience", "accept": ["patience"], "note": "耐心；别写成 patients（病人）"}], "pitfalls": ["第一人称要全部转成第三人称：I → Li Na / she，my → her，me → her。", "故事里有两位女性（Li Na 和 Mrs. Wang），多用名字，少用 she，免得指代不清。", "叙事用一般过去时；“已经忘了 / 教得太快”用过去完成时 had forgotten / had gone。", "填空：bigger 双写 g；patience（耐心）≠ patients（病人）。"], "script": ["Hello, everyone. I'm Li Na from Class 3. Last summer, I joined a volunteer program / in my neighborhood. Our job was to help {elderly} people / use smartphones. At first, I thought it would be easy. After all, I use my phone every day. But I soon found / that I was wrong.", "On the first day, I met Mrs. Wang, who was seventy-eight. She wanted to make video calls / with her grandson, who is studying abroad. I showed her the steps quickly, and she nodded. But the next day, she had forgotten everything. I was a little disappointed. Then I realized / that the problem was not with her, but with me. I had gone too fast. Besides, the words on the screen / were too small for her to read, and she was afraid of pressing the wrong {button}.", "So I changed my way. First, I made the words on her phone {bigger}. Then I wrote each step on a card / in large letters, so that she could check them at home. And instead of doing things for her, I let her practice / again and again. I also told her how to avoid phone scams, which worried her a lot.", "Two weeks later, Mrs. Wang called her grandson / all by herself. She was so excited / that she held my hands / and said thank you many times.", "This experience taught me / that {patience} matters more than skills. It also showed me / that the elderly are not slow learners. They just need someone / to walk at their pace. I hope more young people will join us / and help our grandparents / keep up with the digital world. Thank you."], "model": ["She joined a program to help elderly people use smartphones. [[At first]], she thought it would be easy, [[but]] she soon found she was wrong.", "She met Mrs. Wang, a 78-year-old woman who wanted to make video calls with her grandson abroad. Li Na showed her the steps, [[but]] the next day Mrs. Wang had forgotten everything. Li Na realized she had gone too fast. [[Besides]], the words on the screen were too small, and Mrs. Wang was afraid of pressing the wrong button.", "[[So]] Li Na changed her way. She made the words on the phone bigger, wrote each step on a card so that Mrs. Wang could check them at home, and let her practice again and again. [[Two weeks later]], Mrs. Wang called her grandson all by herself.", "[[From this experience]], Li Na learned that patience matters more than skills, and that the elderly just need someone to walk at their pace."], "vocab": [["elderly", "年长的；the elderly 老年人"], ["phone scam", "电话 / 网络诈骗"], ["at one's pace", "按某人的节奏"], ["keep up with", "跟上"]], "audio": "audio/set5-volunteer.mp3", "duration": 113.3, "words": 274, "model_words": 167}];
+  const FLOW = [
+    { key: 'preview', chip: '读表 60s', label: '阅读表格', dur: 60, tip: '浏览表格，预测每个空的词性和形式' },
+    { key: 'play1', chip: '第 1 遍', label: '第一遍录音', audio: true, tip: '边听边填空' },
+    { key: 'gap1', label: '间隔', dur: 10, tip: '马上播放第二遍' },
+    { key: 'play2', chip: '第 2 遍', label: '第二遍录音', audio: true, tip: '补全空格，同时速记表格外细节' },
+    { key: 'gap2', label: '检查记录', dur: 10, tip: '检查拼写和词形，之后记录提交' },
+    { key: 'play3', chip: '第 3 遍', label: '第三遍录音（转述前）', audio: true, reveal: true, tip: '转述开头已显示，重点补记表格外细节' },
+    { key: 'prep', chip: '准备 120s', label: '准备转述', dur: 120, tip: '按表格顺序串一遍，每个要点想好一条补充细节' },
+    { key: 'speak', chip: '转述 120s', label: '开始转述', dur: 120, beep: true, tip: '从给定开头说起，建议用手机录音' },
+    { key: 'done', label: '练习结束', tip: '展开教师区，对照评分清单打分' },
+  ];
+  const STEPS = FLOW.filter(f => f.chip).length;
+  const LANG = [
+    '用了给定开头；人称正确（he / she 没有混用）',
+    '时态正确：介绍、建议用现在时，经历、研究过程用过去时',
+    '有过渡衔接（First, Besides, However …）',
+    '没有长时间停顿、自我纠正，也没说 “Sorry”',
+    '2 分钟内说完，语速自然',
+  ];
+
+  const $ = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const clockText = sec => { sec = Math.max(0, Math.ceil(sec - 0.001)); return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`; };
+  const elapsedText = sec => { sec = Math.max(0, Math.floor(sec)); return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`; };
+  const store = {
+    get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* storage unavailable */ } },
+  };
+
+  const player = new Audio();
+  player.preload = 'auto';
+  const manual = $('#manual');
+  let cur = 0, stage = -1, paused = false, timer = null, endAt = 0, remain = 0, stageDur = 1;
+  let actx = null, wake = null, unlocking = false, view = 'plain';
+
+  const set = () => SETS[cur];
+  const blanks = () => $$('#record input');
+  const boxes = () => $$('#dScore input[type=checkbox]');
+  const splitBlanks = t => t.split(/(\[\d\])/).map(p => { const m = p.match(/^\[(\d)\]$/); return m ? { n: +m[1] } : { text: p }; });
+
+  /* ---------- rendering ---------- */
+  function renderSetButtons() {
+    $('#sets').innerHTML = SETS.map((s, i) =>
+      `<button type="button" class="set-btn" id="set-${s.id}" aria-pressed="false" data-i="${i}">` +
+      `<span class="n">第 ${s.id} 套 · ${esc(s.genre.split('（')[0])}</span><span class="t">${esc(s.topic_cn)}</span></button>`).join('');
+    $$('.set-btn').forEach(b => b.addEventListener('click', () => selectSet(+b.dataset.i)));
+  }
+
+  function renderRecord(s) {
+    let h = `<thead><tr><th colspan="2" scope="col">${esc(s.title)}</th></tr></thead><tbody>`;
+    for (const r of s.rows.filter(r => r.in_table !== false)) {
+      const items = r.table.map(t => splitBlanks(t).map(p => p.text !== undefined ? esc(p.text) :
+        `<span class="blank"><span class="blank-core"><span class="num">(${p.n})</span>` +
+        `<input id="blank-${p.n}" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="第 ${p.n} 空">` +
+        `</span><span class="fb" id="fb-${p.n}"></span></span>`).join(''));
+      const body = items.length > 1 ? `<ul>${items.map(x => `<li>${x}</li>`).join('')}</ul>` : items[0];
+      h += `<tr><th scope="row">${esc(r.main)}</th><td>${body}</td></tr>`;
+    }
+    $('#record').innerHTML = h + '</tbody>';
+    blanks().forEach(inp => inp.addEventListener('input', () => {
+      inp.dataset.state = '';
+      const fb = $(`#fb-${inp.id.split('-')[1]}`);
+      fb.textContent = ''; fb.className = 'fb';
+      save();
+    }));
+  }
+
+  function checkItem(id, kind, row, html) {
+    const tag = kind === 't' ? '<span class="tag t">表格</span>' : kind === 'x' ? '<span class="tag x">补充</span>' : '';
+    return `<li><label><input type="checkbox" id="c-${id}" data-kind="${kind}" data-row="${row}">${tag}<span class="txt">${html}</span></label></li>`;
+  }
+
+  function renderScore(s) {
+    const fill = t => splitBlanks(t).map(p => p.text !== undefined ? esc(p.text) : `<strong class="ans">${esc(s.answers[p.n - 1].word)}</strong>`).join('');
+    $('#scoreRows').innerHTML = s.rows.map((r, ri) =>
+      `<div class="row-block"><h4>${esc(r.main)}${r.in_table === false ? ' <span class="muted">（表格外）</span>' : ''}</h4><ul class="checks">` +
+      r.table.map((t, ti) => checkItem(`t-${ri}-${ti}`, 't', ri, fill(t))).join('') +
+      r.extras.map((t, xi) => checkItem(`x-${ri}-${xi}`, 'x', ri, esc(t))).join('') +
+      '</ul></div>').join('');
+    $('#langList').innerHTML = LANG.map((t, i) => checkItem(`l-${i}`, 'l', -1, esc(t))).join('');
+  }
+
+  function renderModel(s) {
+    $('#modelHint').textContent = `约 ${s.model_words} 词。虚线下划线是给定开头，黄色标出的是衔接词和转述动词。`;
+    $('#model').innerHTML = s.model.map((p, i) => {
+      let h = esc(p).replace(/\[\[(.+?)\]\]/g, '<mark class="hl">$1</mark>');
+      if (i === 0) h = `<span class="given">${esc(s.opening)}</span> ${h}`;
+      return `<p>${h}</p>`;
+    }).join('');
+  }
+
+  function renderScript(s) {
+    $('#viewPlain').setAttribute('aria-pressed', String(view === 'plain'));
+    $('#viewSense').setAttribute('aria-pressed', String(view === 'sense'));
+    $('#script').innerHTML = s.script.map(p => {
+      let h = esc(p);
+      h = view === 'sense'
+        ? h.replace(/\{(\w+)\}/g, '$1').replace(/ \/ /g, ' <span class="sep" aria-label="停顿">/</span> ')
+        : h.replace(/ \/ /g, ' ').replace(/\{(\w+)\}/g, '<strong class="ans">$1</strong>');
+      return `<p>${h}</p>`;
+    }).join('');
+    $('#scriptHint').textContent = view === 'sense'
+      ? '红色 / 是句中可以稍停的位置（标点处本来就要停，不再标）。跟着录音一个意群一个意群地跟读，别停在意群中间。'
+      : `${s.words} 词，录音 ${elapsedText(s.duration)}。蓝色粗体是填空答案。`;
+  }
+
+  function renderKey(s) {
+    $('#keyBody').innerHTML =
+      `<table class="table-plain"><thead><tr><th>空</th><th>答案</th><th>说明</th></tr></thead><tbody>` +
+      s.answers.map((a, i) => `<tr><td>${i + 1}</td><td>${esc(a.word)}</td><td>${esc(a.note)}</td></tr>`).join('') +
+      `</tbody></table>` +
+      `<p class="hint">说话人：${esc(s.speaker)}，转述用 ${s.pronoun === 'she' ? 'she / her' : 'he / his'}。</p>` +
+      `<div class="row-block"><h4>易错点</h4><ul class="list">${s.pitfalls.map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>` +
+      `<div class="row-block"><h4>词汇</h4><p class="vocab">${s.vocab.map(([en, cn]) => `<span><b>${esc(en)}</b> ${esc(cn)}</span>`).join('')}</p></div>`;
+  }
+
+  /* ---------- state ---------- */
+  function save() {
+    store.set(`p2rt-v1-${set().slug}`, {
+      b: blanks().map(x => x.value),
+      c: boxes().filter(x => x.checked).map(x => x.id),
+    });
+  }
+  function restore() {
+    const d = store.get(`p2rt-v1-${set().slug}`) || {};
+    blanks().forEach((x, i) => { x.value = (d.b && d.b[i]) || ''; });
+    (d.c || []).forEach(id => { const el = document.getElementById(id); if (el) el.checked = true; });
+    updateScore();
+  }
+
+  function updateScore() {
+    const all = boxes();
+    const of = k => all.filter(b => b.dataset.kind === k);
+    const on = list => list.filter(b => b.checked);
+    const t = of('t'), x = of('x'), l = of('l');
+    const tc = on(t).length, xc = on(x).length, lc = on(l).length;
+    const xr = new Set(on(x).map(b => b.dataset.row)).size;
+    const ratio = t.length ? tc / t.length : 0;
+    let band = '—';
+    if (tc + xc + lc) {
+      if (ratio === 1 && xc >= 3 && xr >= 3 && lc >= 4) band = '8–9 分';
+      else if (ratio >= 0.8 && xc >= 1 && lc >= 3) band = '6–7 分';
+      else if (ratio >= 0.5) band = '4–5 分';
+      else band = '1–3 分';
+    }
+    $('#sTable').textContent = `${tc}/${t.length}`;
+    $('#sExtra').textContent = `${xc} 条 · ${xr} 个要点`;
+    $('#sLang').textContent = `${lc}/${l.length}`;
+    $('#sBand').textContent = band;
+    $('#scoreCount').textContent = tc + xc + lc ? `表格 ${tc}/${t.length} · 补充 ${xc} 条 · 估计 ${band}` : '';
+  }
+
+  function checkBlanks() {
+    let ok = 0;
+    set().answers.forEach((a, i) => {
+      const inp = $(`#blank-${i + 1}`), fb = $(`#fb-${i + 1}`);
+      const v = inp.value.trim().replace(/[.,;:!?。，]+$/, '');
+      let st = 'bad', msg = `✗ ${a.word}`;
+      if (!v) msg = `未填 · ${a.word}`;
+      else if (a.accept.includes(v)) { st = 'ok'; msg = '✓'; ok++; }
+      else if (a.accept.some(w => w.toLowerCase() === v.toLowerCase())) { st = 'case'; msg = `注意大小写 · ${a.word}`; }
+      inp.dataset.state = st;
+      fb.textContent = msg;
+      fb.className = `fb ${st}`;
+    });
+    $('#checkSummary').textContent = `答对 ${ok}/4，记录部分得 ${ok * 1.5} 分（满分 6 分）`;
+  }
+
+  function clearBlanks() {
+    blanks().forEach(b => { b.value = ''; b.dataset.state = ''; });
+    $$('#record .fb').forEach(f => { f.textContent = ''; f.className = 'fb'; });
+    $('#checkSummary').textContent = '';
+    save();
+  }
+  function lockBlanks(on) {
+    blanks().forEach(b => { b.readOnly = on; });
+    $('#lockNote').hidden = !on;
+  }
+  function showOpening(on) {
+    $('#opening').hidden = !on;
+    $('#openingWait').hidden = on;
+  }
+
+  /* ---------- exam flow ---------- */
+  function setButtons() {
+    const active = stage >= 0 && FLOW[stage].key !== 'done';
+    $('#btnStart').textContent = stage >= 0 ? '重新开始' : '开始模拟';
+    $('#btnPause').disabled = !active;
+    $('#btnPause').textContent = paused ? '继续' : '暂停';
+    $('#btnSkip').disabled = !active;
+    $('#btnReset').disabled = stage < 0;
+    $('#console').classList.toggle('is-paused', paused);
+  }
+
+  function renderTrack() {
+    $('#track').innerHTML = FLOW.map((f, i) => f.chip
+      ? `<li class="${stage > i ? 'done' : ''}"${stage === i ? ' aria-current="step"' : ''}>${f.chip}</li>` : '').join('');
+  }
+
+  function idle() {
+    stage = -1; paused = false;
+    $('#console').dataset.stage = 'idle';
+    $('#stageStep').textContent = `第 ${set().id} 套 · 未开始`;
+    $('#stageLabel').textContent = '准备好后点「开始模拟」';
+    $('#stageTip').textContent = '读表 60 秒 → 听两遍填空 → 第三遍 → 准备 2 分钟 → 转述 2 分钟';
+    $('#clock').textContent = '1:00';
+    $('#clock').classList.remove('warn');
+    $('#barFill').style.width = '0%';
+    $('#btnPlay').hidden = true;
+    renderTrack();
+    setButtons();
+  }
+
+  function stopSim() {
+    clearInterval(timer); timer = null;
+    unlocking = false;
+    player.pause();
+    releaseWake();
+  }
+
+  function enter(i) {
+    clearInterval(timer); timer = null;
+    stage = i; paused = false;
+    const st = FLOW[i];
+    $('#console').dataset.stage = st.key;
+    $('#btnPlay').hidden = true;
+    const step = FLOW.slice(0, i + 1).filter(f => f.chip).length;
+    $('#stageStep').textContent = st.key === 'done' ? `第 ${set().id} 套 · 已完成`
+      : `第 ${set().id} 套 · ${st.chip ? `第 ${step}/${STEPS} 步` : '过渡'}`;
+    $('#stageLabel').textContent = st.label;
+    $('#stageTip').textContent = st.tip;
+    renderTrack();
+    setButtons();
+    if (st.reveal) { lockBlanks(true); showOpening(true); }
+    if (st.key === 'done') {
+      $('#clock').textContent = '完成';
+      $('#clock').classList.remove('warn');
+      $('#barFill').style.width = '100%';
+      releaseWake();
+      return;
+    }
+    if (st.beep) beep(880);
+    if (st.audio) {
+      $('#clock').textContent = `0:00 / ${elapsedText(player.duration || set().duration)}`;
+      $('#barFill').style.width = '0%';
+      playAudio();
+    } else {
+      stageDur = st.dur;
+      endAt = performance.now() + st.dur * 1000;
+      tick();
+      timer = setInterval(tick, 200);
+    }
+  }
+
+  function tick() {
+    const left = (endAt - performance.now()) / 1000;
+    $('#clock').textContent = clockText(left);
+    $('#clock').classList.toggle('warn', left <= 10 && FLOW[stage].key !== 'speak');
+    $('#barFill').style.width = `${Math.min(100, (1 - left / stageDur) * 100)}%`;
+    if (left <= 0) {
+      clearInterval(timer); timer = null;
+      if (FLOW[stage].beep) beep(660);
+      enter(stage + 1);
+    }
+  }
+
+  function playAudio() {
+    unlocking = false;
+    player.muted = false;
+    player.currentTime = 0;
+    const p = player.play();
+    if (p && p.catch) p.catch(() => {
+      $('#btnPlay').hidden = false;
+      $('#stageTip').textContent = '浏览器没有自动播放，请点「播放录音」';
+    });
+  }
+
+  function start() {
+    stopSim();
+    manual.pause();
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      actx.resume();
+    } catch { actx = null; }
+    // Unlock the player inside this click so later stages can start it without a tap (iOS).
+    unlocking = true;
+    player.muted = true;
+    const p = player.play();
+    const done = () => { if (unlocking) { player.pause(); player.currentTime = 0; } player.muted = false; unlocking = false; };
+    if (p && p.then) p.then(done, done); else done();
+    clearBlanks();
+    lockBlanks(false);
+    showOpening(false);
+    requestWake();
+    enter(0);
+  }
+
+  function togglePause() {
+    if (stage < 0 || FLOW[stage].key === 'done') return;
+    const st = FLOW[stage];
+    paused = !paused;
+    if (paused) {
+      if (st.audio) player.pause();
+      else { remain = endAt - performance.now(); clearInterval(timer); timer = null; }
+    } else if (st.audio) {
+      player.play().catch(() => { $('#btnPlay').hidden = false; });
+    } else {
+      endAt = performance.now() + remain;
+      timer = setInterval(tick, 200);
+    }
+    setButtons();
+  }
+
+  function skip() {
+    if (stage < 0 || FLOW[stage].key === 'done') return;
+    player.pause();
+    enter(stage + 1);
+  }
+
+  function reset() {
+    stopSim();
+    lockBlanks(false);
+    showOpening(true);
+    idle();
+  }
+
+  function beep(freq) {
+    if (!actx) return;
+    try {
+      const t = actx.currentTime, o = actx.createOscillator(), g = actx.createGain();
+      o.type = 'sine';
+      o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.3, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+      o.connect(g); g.connect(actx.destination);
+      o.start(t); o.stop(t + 0.45);
+    } catch { /* no audio output */ }
+  }
+
+  async function requestWake() {
+    try { wake = navigator.wakeLock ? await navigator.wakeLock.request('screen') : null; } catch { wake = null; }
+  }
+  function releaseWake() {
+    try { if (wake) wake.release(); } catch { /* already released */ }
+    wake = null;
+  }
+
+  player.addEventListener('timeupdate', () => {
+    if (stage < 0 || !FLOW[stage].audio || unlocking) return;
+    const d = player.duration || set().duration || 1;
+    $('#clock').textContent = `${elapsedText(player.currentTime)} / ${elapsedText(d)}`;
+    $('#barFill').style.width = `${Math.min(100, player.currentTime / d * 100)}%`;
+  });
+  player.addEventListener('ended', () => { if (stage >= 0 && FLOW[stage].audio) enter(stage + 1); });
+  player.addEventListener('error', () => { if (stage >= 0) $('#stageTip').textContent = '录音没有加载出来，请检查网络后点「重新开始」'; });
+  manual.addEventListener('play', () => { if (stage >= 0 && !paused && FLOW[stage].key !== 'done') togglePause(); });
+
+  /* ---------- wiring ---------- */
+  function selectSet(i) {
+    stopSim();
+    cur = i;
+    const s = set();
+    $$('.set-btn').forEach((b, j) => b.setAttribute('aria-pressed', String(j === i)));
+    $('#setMeta').textContent = `第 ${s.id} 套 · ${s.theme} · ${s.genre}`;
+    renderRecord(s);
+    $('#opening').textContent = s.opening;
+    $('#checkSummary').textContent = '';
+    renderScore(s);
+    renderModel(s);
+    renderScript(s);
+    renderKey(s);
+    player.src = s.audio;
+    manual.src = s.audio;
+    lockBlanks(false);
+    showOpening(true);
+    restore();
+    idle();
+  }
+
+  $('#btnStart').addEventListener('click', start);
+  $('#btnPause').addEventListener('click', togglePause);
+  $('#btnSkip').addEventListener('click', skip);
+  $('#btnReset').addEventListener('click', reset);
+  $('#btnPlay').addEventListener('click', () => { $('#btnPlay').hidden = true; playAudio(); });
+  $('#btnCheck').addEventListener('click', checkBlanks);
+  $('#btnClear').addEventListener('click', () => { lockBlanks(false); clearBlanks(); });
+  $('#dScore').addEventListener('change', () => { updateScore(); save(); });
+  $('#btnClearScore').addEventListener('click', () => { boxes().forEach(b => { b.checked = false; }); updateScore(); save(); });
+  $('#viewPlain').addEventListener('click', () => { view = 'plain'; renderScript(set()); });
+  $('#viewSense').addEventListener('click', () => { view = 'sense'; renderScript(set()); });
+
+  renderSetButtons();
+  const m = location.hash.match(/^#set([1-5])$/);
+  selectSet(m ? +m[1] - 1 : 0);
+})();
+</script>
