@@ -33,49 +33,50 @@ So, again, let me thank Minister Zhao and Vice Minister Liu, and I look forward 
     },
     {
         "id": 2,
-        "title": "北京中轴线",
-        "tag": "介绍 · 事物介绍类（扩写自听力第 2 套）",
+        "title": "天坛",
+        "tag": "介绍 · 事物介绍类（体裁参照听力第 2 套，内容原创）",
         "text": """
-Good afternoon, everyone. If you look at a map of Beijing, you will see {1:a straight line running from north to south}. This is the Beijing Central Axis, and it is about {2:seven point eight kilometres long}. It begins at Yongdingmen Gate in the south and ends at the Bell and Drum Towers in the north. Along it, or beside it, stand many famous places, such as Tiananmen, the Forbidden City, Jingshan Park and the Temple of Heaven.
+Good afternoon, everyone. Today I'd like to take you to {1:one of the most famous parks in Beijing}: the Temple of Heaven. It stands in the south of the city and covers about {2:two hundred and seventy hectares}, which is much larger than the Forbidden City.
 
-Its history is very long. More than {3:seven hundred years ago}, when the city was planned, the builders chose a central line and placed the most important buildings along it. Later, in the Ming dynasty, the Forbidden City was completed in 1420, right {4:in the very heart of the axis}. For centuries, the city grew on both sides of this line.
+The temple has a long history. It was built in 1420, {3:during the Ming dynasty}. For nearly five hundred years, emperors came here every year to {4:pray for a good harvest}. They believed that heaven would send just the right amount of rain and sunshine, so that farmers could grow enough food for everyone. On the shortest day of winter, the emperor would walk to the Circular Mound, a three-level white stone altar, and make his offering under the open sky, with music, incense and many officials following him.
 
-The Central Axis is special for three reasons. First, its design shows the traditional Chinese idea of {5:order and balance}. Buildings stand in pairs on the left and right, and the road leads the eye from one great gate to the next. Second, it is not a museum. People still live, work and walk along it every day. In the early morning, older residents {6:practise tai chi in Jingshan Park}, and children play in the hutongs nearby. Third, it tells a long story about how a city was planned and how it has been protected. Climb Jingshan Hill and look back, and you will see rooftops spreading out on both sides of the line like a golden sea, all the way to the horizon.
+The most famous building is the Hall of Prayer for Good Harvests. It has {5:a round blue roof} with three layers, and its tall, strong wooden columns hold up the whole hall. The shapes of the buildings also carry meaning. The round roof stands for heaven, and the square walls around it stand for {6:the earth below}. In this way, the design shows the old Chinese idea that heaven and earth belong together.
 
-Protecting the axis is not always easy. As Beijing grew quickly in the last century, some old gates were pulled down and some new buildings blocked the view. In recent years, many of those buildings have been {7:removed to open up the view}, and Yongdingmen Gate was rebuilt in 2005.
+Another favourite place is the Echo Wall. If you whisper to the wall from one end, a friend {7:standing at the other end} can hear your voice clearly. Visitors, especially young children, love to try it again and again.
 
-The hard work has paid off. In July 2024, the Central Axis was added to {8:the UNESCO World Heritage List}. Today, visitors from all over the world can {9:take a virtual tour online} and explore its gates, halls and gardens from home.
+The Temple of Heaven is also a treasure for the whole world. In 1998, it was added to {8:the UNESCO World Heritage List}, and since then, visitors from many countries have come to admire its beauty and its careful design.
 
-But I hope you will not stop there. When you have time, {10:walk along the axis yourself} from south to north, slowly, with an open mind, and feel how a great city and its daily life have grown together. Thank you very much for listening.
+Today, the park is not only a place for tourists. It is also part of daily life. Early in the morning, local residents {9:come to exercise, sing and dance} among the old cypress trees. Some practise tai chi, some play chess, and some simply sit and chat with their friends. In spring, the trees turn green, and in autumn, golden leaves fall softly on the old stone paths, so every season has its own charm.
+
+If you ever visit Beijing, I hope you will {10:come early in the morning} and join them. You will see an ancient place that is still full of life and energy. Thank you all very much for listening.
 """,
         "vocab": [
-            ("axis", "轴线"), ("dynasty", "朝代"), ("hutong", "胡同"),
-            ("balance", "平衡，对称"), ("block the view", "挡住视线"),
-            ("World Heritage List", "世界遗产名录"), ("virtual tour", "线上虚拟游览"),
-            ("be protected", "得到保护"),
+            ("harvest", "收成"), ("hectare", "公顷"), ("dynasty", "朝代"),
+            ("hall", "殿，厅"), ("column", "柱子"), ("echo", "回声"),
+            ("cypress", "柏树"), ("World Heritage List", "世界遗产名录"),
         ],
     },
     {
         "id": 3,
-        "title": "北京雨燕",
-        "tag": "说明 · 问题—措施类（扩写自听力第 3 套）",
+        "title": "让北京的天空重新变蓝",
+        "tag": "说明 · 问题—措施类（体裁参照听力第 3 套，内容原创）",
         "text": """
-Hello, everyone. Today I'd like to tell you about a small bird with a big connection to our city. It is called the Beijing swift, and it is {1:the only wild bird named after Beijing}. Many people know it as the bird that circles the old towers and palace roofs on summer evenings, crying out in a loud, sharp voice.
+Hello, everyone. Many people remember a time when winter days in Beijing were grey, and {1:the sky was hidden by thick smog}. Today I'd like to tell you how our city has been fighting for cleaner air, and what we can do to help.
 
-Beijing swifts are amazing flyers. They spend almost their whole lives in the air. They can eat, drink and even {2:sleep and mate while flying}. They land only when they need to build a nest and raise their young. Every spring, they come back to Beijing, and in late July they set off again for {3:the warm lands of southern Africa}. The journey is more than ten thousand kilometres in each direction.
+First, let's look at the problem. Smog is made of tiny particles in the air, and these particles can {2:harm our lungs and hearts}. In Beijing, they came from several sources: coal burned for heating, smoke from factories, exhaust from cars and lorries, and {3:dust from building sites}. On the worst days, schools closed, flights were delayed, and people stayed indoors with their windows tightly shut.
 
-Sadly, the number of Beijing swifts has dropped sharply. The main reason is that they are losing their homes. Swifts nest in small holes under the roofs of old buildings. But in recent years, many old buildings have been pulled down or {4:repaired and sealed up} without leaving any holes. The birds fly back from Africa and find nowhere to lay their eggs.
+Fortunately, the city has taken strong action. First, it changed the way people heat their homes. Millions of families {4:stopped burning coal} and switched to natural gas or electricity. Second, many old factories were closed or moved out of the city. Third, the city began to {5:control the number of cars} and encouraged people to buy electric ones. Today, many buses and taxis run on electricity, and the subway keeps {6:growing longer every year}. Fourth, the city has planted millions of trees and built new parks, because green areas can {7:catch dust and clean the air}. Fifth, builders were told to cover their sites and water the roads, so that less dust flew into the air.
 
-Fortunately, people are taking action. Scientists are studying how the swifts travel by fixing {5:tiny tracking devices to their bodies}. These devices show where the birds rest, how fast they fly, and {6:which dangers they meet on the way}. Meanwhile, volunteers are making a difference closer to home. They count the birds every summer, and they hang up special nest boxes under the eaves of old buildings and {7:in the corners of quiet parks}. Some boxes have already been used, which gives everyone hope. One volunteer told me that the first time she saw a pair of swifts enter a box, she almost cried with joy.
+These measures have worked. Over the past ten years, the amount of tiny particles in the air has fallen by more than half, and the number of blue-sky days has {8:risen year after year}. On a clear morning, many residents now enjoy {9:a beautiful view of the Western Hills}, and children can play outside without worrying about the air. Every day, the city publishes air quality data, so anyone can check the numbers on a phone before going out. I have lived here for twenty years, and I never thought I would see the hills so clearly again.
 
-Schools can help too. In several districts, students {8:learn to recognise the swifts' calls} and take part in the counting. When the boxes are checked, young volunteers {9:record every egg and every chick}, so that scientists have clear data.
+But the work is not finished. Clean air depends on all of us. You can help in simple ways: {10:take the subway or ride a bike} instead of asking for a lift, turn off the lights when you leave a room, and never burn rubbish. Small actions, repeated by millions of people, can make a big difference.
 
-Protecting Beijing swifts is not only about saving one kind of bird. It is also about keeping the old city alive and {10:learning to share it with nature}. Their story reminds us that cities belong to wildlife as well. The next time you hear a sharp cry above the roofs, please look up and say hello. Thank you for listening.
+Let's keep working together, so that our grandchildren will grow up under a blue sky. Thank you for listening.
 """,
         "vocab": [
-            ("swift", "雨燕"), ("sharply", "急剧地"), ("nest box", "人工巢箱"),
-            ("tracking device", "追踪器"), ("eaves", "屋檐"),
-            ("volunteer", "志愿者"), ("chick", "雏鸟"), ("recognise", "识别"),
+            ("smog", "雾霾"), ("particle", "颗粒物"), ("exhaust", "尾气"),
+            ("lorry", "卡车"), ("natural gas", "天然气"), ("subway", "地铁"),
+            ("measure", "措施"), ("difference", "差别，影响"),
         ],
     },
 ]
