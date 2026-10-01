@@ -1,0 +1,47 @@
+/* A4 handouts, printed by pdf.js. Page margins are set there. */
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  margin: 0;
+  color: #111;
+  font-family: "Songti SC", "SimSun", "Noto Serif CJK SC", "Source Han Serif SC", "WenQuanYi Zen Hei", serif;
+  font-size: 10.5pt;
+  line-height: 1.6;
+}
+.en { font-family: "Times New Roman", "Liberation Serif", Times, serif; }
+h1, h2, h3, p { margin: 0; }
+
+.page + .page { break-before: page; }
+.page h2 {
+  font-size: 13pt;
+  padding-bottom: 1.5mm;
+  margin-bottom: 2mm;
+  border-bottom: 0.6pt solid #888;
+}
+.page h2 span { font-weight: 400; margin-left: 2mm; }
+.tag { font-size: 9.5pt; color: #555; margin-bottom: 1.5mm; }
+.instr { font-size: 9.5pt; color: #333; margin-bottom: 3mm; }
+
+/* the cloze text: tall lines leave room for handwriting, as in the textbook */
+.cloze { font-size: 12pt; line-height: 1.95; }
+.cloze p + p { margin-top: 1mm; }
+.cloze .no { font-size: 11pt; }
+.gap {
+  display: inline-block;
+  margin: 0 0.6mm;
+  border-bottom: 0.75pt solid #111;
+  vertical-align: -0.8mm;
+}
+
+/* answer pages */
+.answers .cloze { line-height: 1.6; font-size: 11pt; }
+.answers .cloze b { color: #b00020; }
+table.key { width: 100%; border-collapse: collapse; font-size: 10.5pt; margin: 2mm 0 3mm; }
+table.key td { border: 0.75pt solid #222; padding: 0.8mm 2mm; vertical-align: top; width: 41%; }
+table.key td.n { width: 8mm !important; text-align: center; }
+table.key td.a { font-weight: 700; }
+.vocab { font-size: 10pt; color: #333; }
+.vocab b { font-weight: 700; }
+.cover { padding-top: 6mm; }
+.cover h1 { font-size: 16pt; margin-bottom: 3mm; }
+.cover p { margin-bottom: 1.5mm; }
